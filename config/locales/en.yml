@@ -1,0 +1,129 @@
+# Files in the config/locales directory are used for internationalization and
+# are automatically loaded by Rails. If you want to use locales other than
+# English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more about the API, please read the Rails Internationalization guide
+# at https://guides.rubyonrails.org/i18n.html.
+#
+# Be aware that YAML interprets the following case-insensitive strings as
+# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
+# must be quoted to be interpreted as strings. For example:
+#
+#     en:
+#       "yes": yup
+#       enabled: "ON"
+
+en:
+  app:
+    header:
+      label: "Welcome"
+      btn_sign_in: "Sign in"
+      btn_sign_up: "Sign up"
+
+  devise:
+    sessions:
+      btn_exit: "Exit"
+      title: "Sign in"
+      label_email: "Email"
+      label_password: "Password"
+      btn_sign_in: "Sign in"
+      btn_sign_up: "Sign up"
+    registrations:
+      title: "Registration"
+      label_name: "Name"
+      label_surname: "Surname"
+      label_role: "Role"
+      label_email: "Email"
+      label_password: "Password"
+      label_password_conf: "Password confirmation"
+      role_options:
+        creator: "Project Creator"
+        expert: "Expert"
+      btn_register: "Register"
+
+  projects:
+    index:
+      title: "My Projects"
+      btn_add_project: "Add a project"
+      btn_filter: "Filter"
+      filter_options:
+        all: "All"
+        in_preparation: "In preparation"
+        published: "Published"
+        archive: "Archive"
+        unknown: "Unknown"
+      label_no_projects: "You don't have any projects yet"
+
+  project:
+    show:
+      btn_del_project: "Delete project"
+      btn_edit_project: "Edit project"
+      btn_back: "Back to projects"
+      status_label:
+        in_preparation: "In preparation"
+        published: "Published"
+        archive: "Archive"
+        unknown: "Unknown"
+      status_btn:
+        in_preparation: "Return to preparation"
+        published: "Publish"
+        archive: "Send to archive"
+      label:
+        description: "Description"
+        link: "Link to materials / project"
+        status: "Status"
+      btn_add_question: "Add question"
+      title_questions: "Questions for rating"
+      title_comments: "Expert comments"
+      btn_edit_question: "Edit"
+      btn_del_question: "Delete"
+      label_avg_rating: "Average rating"
+      label_no_questions: "Questions for rating have not been added yet"
+      label_no_comments: "No comments"
+      label_no_ratings: "No ratings"
+      btn_save_ratings: "Save ratings"
+      btn_save_comment: "Save comment"
+      btn_del_comment: "Delete"
+      label_mask_rating: "Rate from 1 to 10"
+      title_comment: "Your comment"
+      label_mask_comment: "Enter your comment..."
+      label_files: "Project files:"
+      ratings_saved: "Ratings continue to be saved!"
+    edit:
+      title: "Edit Project"
+      label_name: "Title"
+      label_description: "Description"
+      label_data_link: "Link to data (GitHub, Google Drive, etc.) or project"
+      btn_save: "Save"
+      label_new_files: "Upload new files"
+      btn_del_file: "Delete"
+    new:
+      title: "Create Project"
+      label_name: "Title"
+      label_description: "Description"
+      label_data_link: "Link to data (GitHub, Google Drive, etc.) or project"
+      btn_save: "Save"
+      
+  question:
+    edit:
+      title: "Edit question"
+      btn_save: "Save"
+      btn_cancel: "Cancel"
+    new:
+      title: "Add a question"
+      btn_save: "Save"
+      btn_cancel: "Cancel"

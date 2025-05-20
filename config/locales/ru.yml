@@ -1,0 +1,100 @@
+ru:
+  app:
+    header:
+      label: "Добро пожаловать"
+      btn_sign_in: "Вход"
+      btn_sign_up: "Регистрация"
+
+  devise:
+    sessions:
+      btn_exit: "Выход"
+      title: "Вход"
+      label_email: "Электронная почта"
+      label_password: "Пароль"
+      btn_sign_in: "Вход"
+      btn_sign_up: "Регистрация"
+    registrations:
+      title: "Регистрация"
+      label_name: "Имя"
+      label_surname: "Фамилия"
+      label_role: "Роль"
+      label_email: "Электронная почта"
+      label_password: "Пароль"
+      label_password_conf: "Подтверждение пароля"
+      role_options:
+        creator: "Создатель проекта"
+        expert: "Эксперт"
+      btn_register: "Зарегистрироваться"
+
+  projects:
+    index:
+      title: "Мои проекты"
+      btn_add_project: "Добавить проект"
+      btn_filter: "Фильтровать"
+      filter_options:
+        all: "Все"
+        in_preparation: "В подготовке"
+        published: "Опубликован"
+        archive: "Архив"
+        unknown: "Неизвестно"
+      label_no_projects: "У вас пока нет проектов"
+
+  project:
+    show:
+      btn_del_project: "Удалить проект"
+      btn_edit_project: "Редактировать проект"
+      btn_back: "Назад к проектам"
+      status_label:
+        in_preparation: "В подготовке"
+        published: "Опубликован"
+        archive: "Архив"
+        unknown: "Неизвестно"
+      status_btn:
+        in_preparation: "Вернуть в подготовку"
+        published: "Опубликовать"
+        archive: "Отправить в архив"
+      label:
+        description: "Описание"
+        link: "Ссылка на материалы / проект"
+        status: "Статус"
+      btn_add_question: "Добавить вопрос"
+      title_questions: "Вопросы для оценки"
+      title_comments: "Комментарии экспертов"
+      btn_edit_question: "Редактировать"
+      btn_del_question: "Удалить"
+      label_avg_rating: "Средняя оценка"
+      label_no_questions: "Вопросы для оценки ещё не добавлены"
+      label_no_comments: "Комментарии отсутствуют"
+      label_no_ratings: "Нет оценок"
+      btn_save_ratings: "Сохранить оценки"
+      btn_save_comment: "Сохранить комментарий"
+      btn_del_comment: "Удалить"
+      label_mask_rating: "Оцените от 1 до 10"
+      title_comment: "Ваш комментарий"
+      label_mask_comment: "Введите ваш комментарий..."
+      label_files: "Файлы проекта:"
+      ratings_saved: "Оценки успешно сохранены!"
+    edit:
+      title: "Редактировать проект"
+      label_name: "Название"
+      label_description: "Описание"
+      label_data_link: "Ссылка на данные (GitHub, Google Drive и т.п.) или проект"
+      btn_save: "Сохранить"
+      label_new_files: "Загрузить новые файлы"
+      btn_del_file: "Удалить"
+    new:
+      title: "Создать проект"
+      label_name: "Название"
+      label_description: "Описание"
+      label_data_link: "Ссылка на данные (GitHub, Google Drive и т.п.) или проект"
+      btn_save: "Сохранить"
+
+  question:
+    edit:
+      title: "Редактировать вопрос"
+      btn_save: "Сохранить"
+      btn_cancel: "Отмена"
+    new:
+      title: "Добавить вопрос"
+      btn_save: "Сохранить"
+      btn_cancel: "Отмена"

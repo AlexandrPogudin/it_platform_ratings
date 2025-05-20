@@ -1,0 +1,43 @@
+<div class="container mt-5">
+  <%= form_with model: @project, local: true do |f| %>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0"><%= t('project.edit.title') %></h2>
+      <%= f.submit t('project.edit.btn_save'), class: "btn btn-success" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :title, t('project.edit.label_name') %>
+      <%= f.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, t('project.edit.label_description') %>
+      <%= f.text_area :description, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :data_url, t('project.edit.label_data_link') %>
+      <%= f.url_field :data_url, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form_with url: upload_files_project_path(@project), method: :post, local: true, html: { multipart: true }, id: "file-upload-form" do |f| %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <%= f.label :files, t('project.edit.label_new_files') %>
+      <%= f.file_field :files, multiple: true, class: "form-control", onchange: "this.form.submit();" %>
+    <% end %>
+  </div>
+  
+  <% if @project.files.attached? %>
+      <ul class="list-group mb-3">
+        <% @project.files.each do |file| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= link_to file.filename.to_s, url_for(file), target: "_blank" %>
+            <%= button_to t('project.edit.btn_del_file'), delete_file_project_path(@project, file_id: file.id), method: :delete, data: { confirm: "Удалить файл?" }, class: "btn btn-sm btn-outline-danger" %>
+          </li>
+        <% end %>
+      </ul>
+  <% end %>
+</div>
+

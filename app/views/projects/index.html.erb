@@ -1,0 +1,58 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><%= t('projects.index.title') %></h2>
+    <% if current_user.role == 'creator' %>
+      <%= link_to t('projects.index.btn_add_project'), new_project_path, class: "btn btn-success" %>
+    <% end %>
+  </div>
+  <% if current_user.role == 'creator' %>
+  <div class="mb-3">
+    <%= form_with url: projects_path, method: :get, local: true, class: "d-flex" do |form| %>
+      <%= hidden_field_tag :locale, I18n.locale %>
+      
+      <%= form.select :status,
+          options_for_select([
+            [t('projects.index.filter_options.in_preparation'), 'draft'],
+            [t('projects.index.filter_options.published'), 'published'],
+            [t('projects.index.filter_options.archive'), 'archived']
+          ], params[:status]),
+          { prompt: t('projects.index.filter_options.all') },
+          class: "form-select" %>
+
+      <%= form.submit t('projects.index.btn_filter'), class: "btn btn-primary ms-2" %>
+    <% end %>
+  </div>
+
+  <% end %>
+  <% if @projects.any? %>
+    <div class="list-group">
+      <% @projects.each do |project| %>
+        <%= link_to project_path(project), class: "list-group-item list-group-item-action" do %>
+            <strong><%= project.title %></strong><br>
+            <span class="badge 
+                <%=
+                  case project.status
+                  when 'draft' then 'bg-warning'
+                  when 'published' then 'bg-success'
+                  when 'archived' then 'bg-secondary'
+                  else 'bg-light text-dark'
+                  end
+                %>">
+                <%=
+                  case project.status
+                  when 'draft' then t('projects.index.filter_options.in_preparation')
+                  when 'published' then t('projects.index.filter_options.published')
+                  when 'archived' then t('projects.index.filter_options.archive')
+                  else t('projects.index.filter_options.unknown')
+                  end
+                %>
+            </span>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted"><%= t('projects.index.label_no_projects') %></p>
+  <% end %>
+</div>
+
+

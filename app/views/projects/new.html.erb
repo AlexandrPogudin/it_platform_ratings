@@ -1,0 +1,23 @@
+<div class="container mt-5">
+  <%= link_to '←' + t('project.show.btn_back'), projects_path, class: "btn btn-outline-secondary" %>
+  <h2 class="mt-2"><%= t('project.new.title') %></h2>
+
+  <%= form_with model: @project, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :title, t('project.new.label_name') %>
+      <%= f.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :description, t('project.new.label_description') %>
+      <%= f.text_area :description, class: "form-control" %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :data_url, t('project.new.label_data_link') %>
+      <%= f.url_field :data_url, class: "form-control" %>
+    </div>
+
+    <%= f.submit t('project.new.btn_save'), class: "btn btn-success" %>
+  <% end %>
+</div>

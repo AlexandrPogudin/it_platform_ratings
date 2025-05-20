@@ -1,0 +1,220 @@
+<div class="container mt-5">
+  <div class="mt-4 mb-4">
+    <%= link_to '←' + t('project.show.btn_back'), projects_path, class: "btn btn-outline-secondary" %>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2><%= @project.title %></h2>
+    <% if current_user.role == 'creator' %>
+      <div class="d-flex">
+        <%= link_to t('project.show.btn_edit_project'), edit_project_path(@project), class: "btn btn-outline-warning me-2" %>
+        <%= button_to t('project.show.btn_del_project'), project_path(@project), method: :delete, data: { confirm: 'Вы уверены, что хотите удалить этот проект?' }, class: "btn btn-outline-danger me-2" %>
+      </div>
+    <% end %>
+  </div>
+
+  <p><strong><%= t('project.show.label.description') %>:</strong></p>
+  <p><%= simple_format(@project.description) %></p>
+
+  <p><strong><%= t('project.show.label.link') %>:</strong>
+    <%= link_to @project.data_url, @project.data_url, target: "_blank", rel: "noopener", class: "btn btn-sm btn-outline-primary ms-2" %>
+  </p>
+
+  <p><strong><%= t('project.show.label.status') %>:</strong> 
+    <span class="badge 
+        <%=
+          case @project.status
+          when 'draft' then 'bg-warning'
+          when 'published' then 'bg-success'
+          when 'archived' then 'bg-secondary'
+          else 'bg-light text-dark'
+          end
+        %>">
+        <%=
+          case @project.status
+          when 'draft' then t('projects.index.filter_options.in_preparation')
+          when 'published' then t('projects.index.filter_options.published')
+          when 'archived' then t('projects.index.filter_options.archive')
+          else t('projects.index.filter_options.unknown')
+          end
+        %>
+    </span>
+  </p>
+
+  <% if @project.files.attached? %>
+    <p><strong><%= t('project.show.label_files') %></strong></p>
+    <ul class="list-group mb-3">
+      <% @project.files.each do |file| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <% file_extension = File.extname(file.filename.to_s).downcase %>
+
+            <% if ['.xls', '.xlsx'].include?(file_extension) %>
+              <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+
+            <% elsif file_extension == '.pdf' %>
+              <i class="bi bi-file-earmark-pdf me-2"></i>
+
+            <% elsif ['.doc', '.docx'].include?(file_extension) %>
+              <i class="bi bi-file-earmark-word me-2"></i>
+
+            <% elsif ['.jpg', '.jpeg', '.png'].include?(file_extension) %>
+              <i class="bi bi-file-earmark-image me-2"></i>
+
+            <% elsif file_extension == '.txt' %>
+              <i class="bi bi-file-earmark-text me-2"></i>
+
+            <% else %>
+              <i class="bi bi-file-earmark me-2"></i>
+            <% end %>
+
+            <%= link_to file.filename.to_s, url_for(file), target: "_blank", class: "text-decoration-none fw-bold" %>
+          </div>
+          <small class="text-muted"><%= number_to_human_size(file.byte_size) %></small>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if current_user.role == 'creator' %>
+  <div class="mt-4 d-flex">
+    <% if @project.status == 'draft' %>
+      <%= button_to t('project.show.status_btn.published'), publish_project_path(@project), method: :patch, class: "btn btn-success me-2", form: { class: "d-inline" } %>
+    <% elsif @project.status == 'published' %>
+      <%= button_to t('project.show.status_btn.archive'), archive_project_path(@project), method: :patch, class: "btn btn-secondary me-2", form: { class: "d-inline" } %>
+    <% elsif @project.status == 'archived' %>
+      <%= button_to t('project.show.status_btn.in_preparation'), revert_to_draft_project_path(@project), method: :patch, class: "btn btn-warning me-2", form: { class: "d-inline" } %>
+    <% end %>
+  </div>
+  <% end %>
+
+  <hr class="mt-4 mb-3"> 
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><%= t('project.show.title_questions') %></h4>
+    <% if current_user.role == 'creator' %>
+      <%= link_to t('project.show.btn_add_question'), new_project_question_path(@project), class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+  <% if @project.questions.any? %>
+    <% if current_user.role == 'expert' %>
+      <%= form_with url: project_ratings_path(@project), method: :post, local: false, id: "ratings-form", data: { turbo: false } do %>
+        <div id="rating-success" class="alert alert-success d-none mb-2" role="alert">
+          <%= t('project.show.ratings_saved') %>
+        </div>
+        <ul class="list-group mb-3">
+          <% @project.questions.each do |question| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong><%= question.question %></strong><br>
+                    <span id="question-<%= question.id %>" class="average-container">
+                      <% if question.average_rating.present? %>
+                        <span class="badge <%= question.average_rating_color %> mt-1 average-badge">
+                          <%= t('project.show.label_avg_rating') %>: <%= question.average_rating %>
+                        </span>
+                      <% else %>
+                        <span class="badge bg-secondary mt-1 average-badge">
+                          <%= t('project.show.label_no_ratings') %>
+                        </span>
+                      <% end %>
+                    </span>
+                  </div>
+                
+                  <div>
+                    <% existing_rating = question.ratings.find_by(expert_id: current_user.id) %>
+                    <%= select_tag "ratings[#{question.id}]",
+                          options_for_select((1..10).to_a, existing_rating&.value),
+                          class: "form-select form-select-sm",
+                          prompt: t('project.show.label_mask_rating') %>
+                  </div>
+            </li>
+          <% end %>
+        </ul>
+        <%= submit_tag t('project.show.btn_save_ratings'), class: "btn btn-success" %>
+      <% end %>
+
+      <% elsif current_user.role == 'creator' %>
+      <ul class="list-group mb-3">
+        <% @project.questions.each do |question| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong><%= question.question %></strong>
+              <br>
+              <% if question.average_rating.present? %>
+                <span class="badge <%= question.average_rating_color %> mt-1"><%= t('project.show.label_avg_rating') %>: <%= question.average_rating %></span>
+              <% else %>
+                <span class="badge bg-secondary mt-1"> <%= t('project.show.label_no_ratings') %></span>
+              <% end %>
+            </div>
+            <div>
+              <%= link_to t('project.show.btn_edit_question'), edit_project_question_path(@project, question), class: "btn btn-sm btn-outline-warning me-2" %>
+              <%= button_to t('project.show.btn_del_question'), project_question_path(@project, question), method: :delete, data: { confirm: 'Удалить этот вопрос?' }, class: "btn btn-sm btn-outline-danger", form: { class: "d-inline" } %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+    
+  <% else %>
+    <p class="text-muted"><%= t('project.show.label_no_questions') %></p>
+  <% end %>
+
+  <hr class="my-4">
+
+  <% if current_user.role == 'expert' %>
+    <h4><%= t('project.show.title_comment') %></h4>
+    <%= form_with url: project_comments_path(@project), method: :post, local: true do %>
+      <div class="mb-3">
+        <%= text_area_tag "comment[content]", @project.comments.find_by(user: current_user)&.content, class: "form-control", rows: 5, placeholder: t('project.show.label_mask_comment') %>
+      </div>
+      <%= submit_tag t('project.show.btn_save_comment'), class: "btn btn-success mb-2" %>
+    <% end %>
+
+    <% if @project.comments.find_by(user: current_user).present? %>
+      <%= button_to t('project.show.btn_del_comment'), project_comment_path(@project, @project.comments.find_by(user: current_user)), method: :delete, data: { confirm: "Удалить комментарий?" }, class: "btn btn-sm btn-outline-danger mb-2" %>
+    <% end %>
+
+    <hr class="my-4">
+
+    <h4><%= t('project.show.title_comments') %></h4>
+    <% if @project.comments.any? %>
+      <ul class="list-group my-3">
+        <% @project.comments.includes(:user).each do |comment| %>
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong><%= "#{comment.user.first_name} #{comment.user.last_name}" %></strong>
+              <small class="text-muted"><%= comment.updated_at.strftime("%d.%m.%Y %H:%M") %></small>
+            </div>
+            <p><%= simple_format(comment.content) %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted"><%= t('project.show.label_no_comments') %></p>
+    <% end %>
+
+
+  <% elsif current_user.role == 'creator' %>
+    <h4><%= t('project.show.title_comments') %></h4>
+    <% if @project.comments.any? %>
+      <ul class="list-group my-3">
+        <% @project.comments.includes(:user).each do |comment| %>
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <strong><%= "#{comment.user.first_name} #{comment.user.last_name}" %></strong>
+              <small class="text-muted"><%= comment.updated_at.strftime("%d.%m.%Y %H:%M") %></small>
+            </div>
+            <p><%= simple_format(comment.content) %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-muted"><%= t('project.show.label_no_comments') %></p>
+    <% end %>
+  <% end %>
+
+</div>
+
+
+
+

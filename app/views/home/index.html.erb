@@ -1,0 +1,26 @@
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1>Платформа оценки проектов</h1>
+    <p class="lead">Добро пожаловать!</p>
+  </div>
+
+  <% if user_signed_in? %>
+    <div class="alert alert-success text-center">
+        Вы вошли как <strong><%= current_user.full_name %></strong> 
+        (<%= current_user.role == 'creator' ? 'Создатель проекта' : 'Эксперт' %>)
+    </div>
+
+  <% else %>
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <h3>Вход</h3>
+        <%= link_to 'Войти', new_user_session_path, class: "btn btn-primary w-100" %>
+      </div>
+      <div class="col-md-4">
+        <h3>Регистрация</h3>
+        <%= link_to 'Зарегистрироваться', new_user_registration_path, class: "btn btn-success w-100" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
