@@ -42,7 +42,7 @@ gem "thruster", require: false
 
 gem 'devise'
 
-gem 'google-cloud-translate', '~> 3.0'
+gem 'google-cloud-translate', '~> 3.7'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
